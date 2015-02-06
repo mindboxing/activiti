@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://activiti.org/bpmn20" id="review-definitions">
+  <message id="DECISION_MADE" name="DECISION_MADE"></message>
+  <process id="notification-process" name="Notification Process" isExecutable="true">
+    <endEvent id="main-end" name="End"></endEvent>
+    <startEvent id="main-start" name="Start"></startEvent>
+    <subProcess id="subprocess1" name="Notification Process">
+      <startEvent id="notification-start-event" name="Start"></startEvent>
+      <sequenceFlow id="flow-send-notification-in" sourceRef="notification-start-event" targetRef="pl-send-notification"></sequenceFlow>
+      <scriptTask id="pl-send-notification" name="Notify Approver" scriptFormat="groovy" activiti:autoStoreVariables="false">
+        <script>println "send notification "+execution.getVariable("approverLevel")</script>
+      </scriptTask>
+      <sequenceFlow id="flow-send-notification-out" sourceRef="pl-send-notification" targetRef="wait-decision-timeout"></sequenceFlow>
+      <intermediateCatchEvent id="wait-decision-timeout" name="Wait Decision">
+        <timerEventDefinition>
+          <timeDuration>${timeout}</timeDuration>
+        </timerEventDefinition>
+      </intermediateCatchEvent>
+      <sequenceFlow id="flow-process-timeout-in" sourceRef="wait-decision-timeout" targetRef="scripttask1"></sequenceFlow>
+      <endEvent id="notification-end-event" name="End"></endEvent>
+      <sequenceFlow id="flow-process-timeout" sourceRef="scripttask1" targetRef="notification-end-event"></sequenceFlow>
+      <scriptTask id="scripttask1" name="Process Timeout" scriptFormat="groovy" activiti:autoStoreVariables="false">
+        <script>println("TIMEOUT "+execution.getVariable("approverLevel"));
+execution.getVariable("action").setDecision("DECLINED");</script>
+      </scriptTask>
+    </subProcess>
+    <sequenceFlow id="flow-main-start" sourceRef="main-start" targetRef="subprocess1"></sequenceFlow>
+    <boundaryEvent id="decision-made-boundary-message" name="Decision Made" attachedToRef="subprocess1" cancelActivity="true">
+      <messageEventDefinition messageRef="DECISION_MADE"></messageEventDefinition>
+    </boundaryEvent>
+    <sequenceFlow id="flow-decision-made" name="Decsion Made" sourceRef="decision-made-boundary-message" targetRef="main-end"></sequenceFlow>
+    <sequenceFlow id="flow-main-end" sourceRef="subprocess1" targetRef="main-end"></sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_notification-process">
+    <bpmndi:BPMNPlane bpmnElement="notification-process" id="BPMNPlane_notification-process">
+      <bpmndi:BPMNShape bpmnElement="main-end" id="BPMNShape_main-end">
+        <omgdc:Bounds height="35.0" width="35.0" x="830.0" y="198.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="main-start" id="BPMNShape_main-start">
+        <omgdc:Bounds height="35.0" width="35.0" x="75.0" y="198.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="subprocess1" id="BPMNShape_subprocess1">
+        <omgdc:Bounds height="171.0" width="591.0" x="180.0" y="130.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="notification-start-event" id="BPMNShape_notification-start-event">
+        <omgdc:Bounds height="35.0" width="35.0" x="240.0" y="217.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="pl-send-notification" id="BPMNShape_pl-send-notification">
+        <omgdc:Bounds height="55.0" width="105.0" x="340.0" y="207.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="wait-decision-timeout" id="BPMNShape_wait-decision-timeout">
+        <omgdc:Bounds height="35.0" width="35.0" x="490.0" y="217.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="notification-end-event" id="BPMNShape_notification-end-event">
+        <omgdc:Bounds height="35.0" width="35.0" x="720.0" y="217.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="scripttask1" id="BPMNShape_scripttask1">
+        <omgdc:Bounds height="55.0" width="105.0" x="570.0" y="207.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="decision-made-boundary-message" id="BPMNShape_decision-made-boundary-message">
+        <omgdc:Bounds height="30.0" width="30.0" x="420.0" y="300.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow-send-notification-in" id="BPMNEdge_flow-send-notification-in">
+        <omgdi:waypoint x="275.0" y="234.0"></omgdi:waypoint>
+        <omgdi:waypoint x="340.0" y="234.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow-send-notification-out" id="BPMNEdge_flow-send-notification-out">
+        <omgdi:waypoint x="445.0" y="234.0"></omgdi:waypoint>
+        <omgdi:waypoint x="490.0" y="234.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow-process-timeout-in" id="BPMNEdge_flow-process-timeout-in">
+        <omgdi:waypoint x="525.0" y="234.0"></omgdi:waypoint>
+        <omgdi:waypoint x="570.0" y="234.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow-process-timeout" id="BPMNEdge_flow-process-timeout">
+        <omgdi:waypoint x="675.0" y="234.0"></omgdi:waypoint>
+        <omgdi:waypoint x="720.0" y="234.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow-main-start" id="BPMNEdge_flow-main-start">
+        <omgdi:waypoint x="110.0" y="215.0"></omgdi:waypoint>
+        <omgdi:waypoint x="180.0" y="215.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow-decision-made" id="BPMNEdge_flow-decision-made">
+        <omgdi:waypoint x="435.0" y="330.0"></omgdi:waypoint>
+        <omgdi:waypoint x="434.0" y="385.0"></omgdi:waypoint>
+        <omgdi:waypoint x="847.0" y="385.0"></omgdi:waypoint>
+        <omgdi:waypoint x="847.0" y="233.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="68.0" x="445.0" y="330.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow-main-end" id="BPMNEdge_flow-main-end">
+        <omgdi:waypoint x="771.0" y="215.0"></omgdi:waypoint>
+        <omgdi:waypoint x="830.0" y="215.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

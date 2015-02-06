@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+	<appender name="FILE" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="File" value="/opt/logs/poc_activiti.log" />
+		<param name="datePattern" value="yyyyMMdd" />
+		<param name="append" value="true" />
+      		<layout class="org.apache.log4j.PatternLayout">
+              		<param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss z} [%t] %-5p %c - %m%n" />
+      		</layout>
+	</appender>
+
+	<appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss z} [%t] %-5p %c - %m%n" />
+		</layout>
+	</appender>
+
+	<!-- Buffer events and log them asynchronously -->
+	<appender name="ASYNC" class="org.apache.log4j.AsyncAppender">
+	<appender-ref ref="FILE" /> 
+		<appender-ref ref="CONSOLE" />
+	</appender>
+
+	<logger name="org"><level value="ERROR"></level></logger>
+	<logger name="org.activiti.engine.impl.db"><level value="ERROR"></level></logger>
+	<logger name="org.activiti.engine.impl.persistence"><level value="ERROR"></level></logger>
+	<logger name="org.activiti.designer.test"><level value="debug"></level></logger>
+	<logger name="org.springframework"><level value="ERROR"></level></logger>
+	<logger name="org.apache"><level value="ERROR"></level></logger>
+
+	
+<!-- 	
+
+	 -->
+<!-- 	<logger name="org.apache"><level value="TRACE"></level></logger> -->
+<!-- 	<logger name="org.springframework"><level value="NONE"></level></logger> -->
+<!-- 	<logger name="javax.xml"><level value="TRACE"></level></logger> -->
+<!-- 	<logger name="org.hibernate"><level value="NONE"></level></logger> -->
+	
+	<!-- Setup the Root category -->
+	<root>
+		<priority value="DEBUG" />
+		<appender-ref ref="ASYNC" />
+	</root>
+
+</log4j:configuration>

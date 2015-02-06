@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
+  <message id="mb-trip-approval" name="mb-trip-approval"></message>
+  <message id="receive-traveler-decision" name="receive-traveler-decision"></message>
+  <message id="cancel-approval-process" name="cancel-approval-process"></message>
+  <message id="CANCEL" name="CANCEL"></message>
+  <process id="mb-approval-process" name="WBG Approval Process" isExecutable="true">
+    <subProcess id="mb-approval-sub-process" name="Travel Polircy Approval Process">
+      <startEvent id="sub-start-event" name="Authorizing PNR"></startEvent>
+      <businessRuleTask id="need-traveler-approval" name="Need Traveler Approval" activiti:ruleVariablesInput="${action},${pnr}" activiti:rules="No LLF,Group or Benefit">
+        <extensionElements>
+          <activiti:executionListener event="start" class="org.mindboxing.listener.AuditExecutionListener"></activiti:executionListener>
+          <activiti:executionListener event="end" class="org.mindboxing.listener.AuditExecutionListener"></activiti:executionListener>
+        </extensionElements>
+      </businessRuleTask>
+      <sequenceFlow id="flow-need-traveler-approval-in" sourceRef="sub-start-event" targetRef="need-traveler-approval"></sequenceFlow>
+      <sequenceFlow id="flow-need-traveler-approval-out" sourceRef="need-traveler-approval" targetRef="exclusivegateway-pre-1"></sequenceFlow>
+      <exclusiveGateway id="exclusivegateway-pre-1" name="Exclusive Gateway"></exclusiveGateway>
+      <sequenceFlow id="flow-call-notification-traveler-in" name="Need Traveler Decision" sourceRef="exclusivegateway-pre-1" targetRef="call-notification-traveler">
+        <conditionExpression xsi:type="tFormalExpression"><![CDATA[${action.decision != "APPROVED"}]]></conditionExpression>
+      </sequenceFlow>
+      <sequenceFlow id="flow-auto-approved-1" name="Auto Approved" sourceRef="exclusivegateway-pre-1" targetRef="task-process-decision">
+        <conditionExpression xsi:type="tFormalExpression"><![CDATA[${action.decision == "APPROVED"}]]></conditionExpression>
+      </sequenceFlow>
+      <scriptTask id="task-process-decision" name="Process Decision" scriptFormat="groovy" activiti:autoStoreVariables="false">
+        <script>println "Process Decision "+execution.getVariable("action").getDecision();</script>
+      </scriptTask>
+      <sequenceFlow id="flow4" sourceRef="task-process-decision" targetRef="sub-end-event"></sequenceFlow>
+      <sequenceFlow id="flow-need-manager-approver-in" name="Approved" sourceRef="exclusivegateway-pre-2" targetRef="need-manager-approver">
+        <conditionExpression xsi:type="tFormalExpression"><![CDATA[${action.decision == "APPROVED"}]]></conditionExpression>
+      </sequenceFlow>
+      <sequenceFlow id="flow-fullfil-1" name="Declined or Changed Required" sourceRef="exclusivegateway-pre-2" targetRef="task-process-decision">
+        <conditionExpression xsi:type="tFormalExpression"><![CDATA[${action.decision == "CHANGE_REQUIRED" || action.decision == "DECLINED"}]]></conditionExpression>
+      </sequenceFlow>
+      <endEvent id="sub-end-event" name="End"></endEvent>
+      <callActivity id="call-notification-traveler" name="Traveler Approval" calledElement="notification-process">
+        <extensionElements>
+          <activiti:in source="timeout" target="timeout"></activiti:in>
+          <activiti:in sourceExpression="1" target="approverLevel"></activiti:in>
+          <activiti:in source="action" target="action"></activiti:in>
+          <activiti:out source="action" target="action"></activiti:out>
+          <activiti:executionListener event="start" class="org.mindboxing.listener.AuditExecutionListener"></activiti:executionListener>
+          <activiti:executionListener event="end" class="org.mindboxing.listener.AuditExecutionListener"></activiti:executionListener>
+        </extensionElements>
+      </callActivity>
+      <sequenceFlow id="flow-call-notification-traveler-out" sourceRef="call-notification-traveler" targetRef="exclusivegateway-pre-2"></sequenceFlow>
+      <businessRuleTask id="need-manager-approver" name="Need Manager Approver" activiti:ruleVariablesInput="${action},${pnr}">
+        <extensionElements>
+          <activiti:executionListener event="start" class="org.mindboxing.listener.ResetDecisionTaskListener"></activiti:executionListener>
+          <activiti:executionListener event="start" class="org.mindboxing.listener.AuditExecutionListener"></activiti:executionListener>
+          <activiti:executionListener event="end" class="org.mindboxing.listener.AuditExecutionListener"></activiti:executionListener>
+        </extensionElements>
+      </businessRuleTask>
+      <exclusiveGateway id="exclusivegateway-pre3" name="Exclusive Gateway"></exclusiveGateway>
+      <callActivity id="call-notification-manager" name="Manager Approval" calledElement="notification-process">
+        <extensionElements>
+          <activiti:in source="timeout" target="timeout"></activiti:in>
+          <activiti:in sourceExpression="2" target="approverLevel"></activiti:in>
+          <activiti:in source="action" target="action"></activiti:in>
+          <activiti:out source="action" target="action"></activiti:out>
+          <activiti:executionListener event="start" class="org.mindboxing.listener.AuditExecutionListener"></activiti:executionListener>
+        </extensionElements>
+      </callActivity>
+      <exclusiveGateway id="exclusivegateway-pre-2" name="Exclusive Gateway">
+        <extensionElements>
+          <activiti:executionListener event="start" class="org.mindboxing.listener.ProcessExecutionListener"></activiti:executionListener>
+        </extensionElements>
+      </exclusiveGateway>
+      <sequenceFlow id="flow-need-manager-approver-out" sourceRef="need-manager-approver" targetRef="exclusivegateway-pre3"></sequenceFlow>
+      <sequenceFlow id="flow-call-notification-manager-in" name="Need Manager Approval" sourceRef="exclusivegateway-pre3" targetRef="call-notification-manager">
+        <conditionExpression xsi:type="tFormalExpression"><![CDATA[${action.managerApproverRequired == true}]]></conditionExpression>
+      </sequenceFlow>
+      <sequenceFlow id="flow-auto-approved-2" name="Auto Approved" sourceRef="exclusivegateway-pre3" targetRef="task-process-decision">
+        <conditionExpression xsi:type="tFormalExpression"><![CDATA[${action.decision == "APPROVED"}]]></conditionExpression>
+      </sequenceFlow>
+      <sequenceFlow id="flow-fullfil-2" name="Manager Decision" sourceRef="call-notification-manager" targetRef="task-process-decision"></sequenceFlow>
+    </subProcess>
+    <endEvent id="main-end-event" name="End"></endEvent>
+    <sequenceFlow id="flow-main-end" sourceRef="mb-approval-sub-process" targetRef="main-end-event"></sequenceFlow>
+    <startEvent id="main-start-event" name="Start"></startEvent>
+    <sequenceFlow id="flow-main-start" sourceRef="main-start-event" targetRef="mb-approval-sub-process"></sequenceFlow>
+    <boundaryEvent id="boundarymessage-cancel" name="CANCEL" attachedToRef="mb-approval-sub-process" cancelActivity="true">
+      <messageEventDefinition messageRef="CANCEL"></messageEventDefinition>
+    </boundaryEvent>
+    <sequenceFlow id="flow-main-end-by-cancel" name="Approval Process Cancel" sourceRef="boundarymessage-cancel" targetRef="main-end-event"></sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_mb-approval-process">
+    <bpmndi:BPMNPlane bpmnElement="mb-approval-process" id="BPMNPlane_mb-approval-process">
+      <bpmndi:BPMNShape bpmnElement="mb-approval-sub-process" id="BPMNShape_mb-approval-sub-process">
+        <omgdc:Bounds height="344.0" width="1061.0" x="270.0" y="85.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="sub-start-event" id="BPMNShape_sub-start-event">
+        <omgdc:Bounds height="35.0" width="35.0" x="369.0" y="135.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="need-traveler-approval" id="BPMNShape_need-traveler-approval">
+        <omgdc:Bounds height="81.0" width="105.0" x="334.0" y="218.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="exclusivegateway-pre-1" id="BPMNShape_exclusivegateway-pre-1">
+        <omgdc:Bounds height="40.0" width="40.0" x="479.0" y="238.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="task-process-decision" id="BPMNShape_task-process-decision">
+        <omgdc:Bounds height="55.0" width="105.0" x="1120.0" y="269.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="sub-end-event" id="BPMNShape_sub-end-event">
+        <omgdc:Bounds height="35.0" width="35.0" x="1260.0" y="279.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="call-notification-traveler" id="BPMNShape_call-notification-traveler">
+        <omgdc:Bounds height="55.0" width="105.0" x="549.0" y="125.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="need-manager-approver" id="BPMNShape_need-manager-approver">
+        <omgdc:Bounds height="71.0" width="105.0" x="839.0" y="117.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="exclusivegateway-pre3" id="BPMNShape_exclusivegateway-pre3">
+        <omgdc:Bounds height="40.0" width="40.0" x="978.0" y="132.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="call-notification-manager" id="BPMNShape_call-notification-manager">
+        <omgdc:Bounds height="55.0" width="105.0" x="1120.0" y="125.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="exclusivegateway-pre-2" id="BPMNShape_exclusivegateway-pre-2">
+        <omgdc:Bounds height="40.0" width="40.0" x="699.0" y="132.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="main-end-event" id="BPMNShape_main-end-event">
+        <omgdc:Bounds height="35.0" width="35.0" x="1400.0" y="239.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="main-start-event" id="BPMNShape_main-start-event">
+        <omgdc:Bounds height="35.0" width="35.0" x="150.0" y="151.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="boundarymessage-cancel" id="BPMNShape_boundarymessage-cancel">
+        <omgdc:Bounds height="30.0" width="30.0" x="800.0" y="417.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow-need-traveler-approval-in" id="BPMNEdge_flow-need-traveler-approval-in">
+        <omgdi:waypoint x="386.0" y="170.0"></omgdi:waypoint>
+        <omgdi:waypoint x="386.0" y="218.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow-need-traveler-approval-out" id="BPMNEdge_flow-need-traveler-approval-out">
+        <omgdi:waypoint x="439.0" y="258.0"></omgdi:waypoint>
+        <omgdi:waypoint x="479.0" y="258.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow-call-notification-traveler-in" id="BPMNEdge_flow-call-notification-traveler-in">
+        <omgdi:waypoint x="499.0" y="238.0"></omgdi:waypoint>
+        <omgdi:waypoint x="498.0" y="153.0"></omgdi:waypoint>
+        <omgdi:waypoint x="549.0" y="152.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="42.0" width="100.0" x="760.0" y="246.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow-auto-approved-1" id="BPMNEdge_flow-auto-approved-1">
+        <omgdi:waypoint x="499.0" y="278.0"></omgdi:waypoint>
+        <omgdi:waypoint x="499.0" y="378.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1172.0" y="378.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1172.0" y="324.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="74.0" x="760.0" y="369.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow4" id="BPMNEdge_flow4">
+        <omgdi:waypoint x="1225.0" y="296.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1260.0" y="296.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow-need-manager-approver-in" id="BPMNEdge_flow-need-manager-approver-in">
+        <omgdi:waypoint x="739.0" y="152.0"></omgdi:waypoint>
+        <omgdi:waypoint x="839.0" y="152.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="48.0" x="1009.0" y="207.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow-fullfil-1" id="BPMNEdge_flow-fullfil-1">
+        <omgdi:waypoint x="719.0" y="172.0"></omgdi:waypoint>
+        <omgdi:waypoint x="719.0" y="335.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1036.0" y="335.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1172.0" y="324.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="42.0" width="100.0" x="990.0" y="361.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow-call-notification-traveler-out" id="BPMNEdge_flow-call-notification-traveler-out">
+        <omgdi:waypoint x="654.0" y="152.0"></omgdi:waypoint>
+        <omgdi:waypoint x="699.0" y="152.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow-need-manager-approver-out" id="BPMNEdge_flow-need-manager-approver-out">
+        <omgdi:waypoint x="944.0" y="152.0"></omgdi:waypoint>
+        <omgdi:waypoint x="978.0" y="152.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow-call-notification-manager-in" id="BPMNEdge_flow-call-notification-manager-in">
+        <omgdi:waypoint x="1018.0" y="152.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1120.0" y="152.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="42.0" width="100.0" x="1288.0" y="192.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow-auto-approved-2" id="BPMNEdge_flow-auto-approved-2">
+        <omgdi:waypoint x="998.0" y="172.0"></omgdi:waypoint>
+        <omgdi:waypoint x="998.0" y="262.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1172.0" y="269.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="74.0" x="1260.0" y="309.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow-fullfil-2" id="BPMNEdge_flow-fullfil-2">
+        <omgdi:waypoint x="1172.0" y="180.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1172.0" y="269.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="86.0" x="1417.0" y="303.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow-main-end" id="BPMNEdge_flow-main-end">
+        <omgdi:waypoint x="1331.0" y="257.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1400.0" y="256.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow-main-start" id="BPMNEdge_flow-main-start">
+        <omgdi:waypoint x="185.0" y="168.0"></omgdi:waypoint>
+        <omgdi:waypoint x="268.0" y="168.0"></omgdi:waypoint>
+        <omgdi:waypoint x="270.0" y="257.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow-main-end-by-cancel" id="BPMNEdge_flow-main-end-by-cancel">
+        <omgdi:waypoint x="815.0" y="447.0"></omgdi:waypoint>
+        <omgdi:waypoint x="814.0" y="488.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1416.0" y="488.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1417.0" y="274.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="42.0" width="100.0" x="825.0" y="447.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

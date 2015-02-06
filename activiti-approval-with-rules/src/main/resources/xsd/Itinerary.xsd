@@ -1,0 +1,1300 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.mindboxing.org/schemas/itinerary" targetNamespace="http://www.mindboxing.org/schemas/itinerary" elementFormDefault="qualified">
+
+	<xs:complexType name="SegmentType">
+		<xs:annotation>
+			<xs:documentation>This is data that is common for every segment
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Origination" type="TravelPointType" maxOccurs="1" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>
+						This is the starting point for a segment.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Destination" type="TravelPointType" maxOccurs="1" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>
+						This is the landing place.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="BillingCode" type="xs:string" maxOccurs="1" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>
+						This is the code that determines how the billing
+						information is sent.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+
+			<xs:element name="ClassOfService" type="ClassOfServiceType" maxOccurs="1" minOccurs="0">
+			</xs:element>
+			<xs:element name="Commisson" type="CommissonType" maxOccurs="1" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>
+						An additional amount of money that is given due
+						to referrals.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Confirmation" type="xs:string" maxOccurs="unbounded" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>
+						The validation of information.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ConventionCode" type="xs:string" maxOccurs="1" minOccurs="0">
+			</xs:element>
+			<xs:element name="Equipment" type="EquipmentType" maxOccurs="1" minOccurs="0">
+			</xs:element>
+
+
+			<xs:element name="Guarantee" type="GuaranteeType" maxOccurs="1" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>
+						The pledge or promise of information or action.
+					</xs:documentation>
+					<xs:documentation>
+						Indicates the guarantee type.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="InvoiceRemark" type="xs:string" maxOccurs="1" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>
+						The remark, or free form field of information,
+						in
+						an invoice.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Memberships" type="xs:string" maxOccurs="unbounded" minOccurs="0">
+
+				<xs:annotation>
+					<xs:documentation>
+						Having loyalty or association with a company.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ReferenceTravelerName" type="xs:string" maxOccurs="1" minOccurs="0">
+			</xs:element>
+			<xs:element name="ReservedSpace" type="xs:string" maxOccurs="1" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates that a seat or position is reserved.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SpecialInformation" type="SpecialInfoType" maxOccurs="1" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>
+						A field for free form information.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TourCode" type="xs:string" maxOccurs="1" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>
+						Code for indicating tour information.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Vendor" type="VendorType" maxOccurs="1" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>
+						A field for merchant information.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Discounts" type="DiscountType" maxOccurs="unbounded" minOccurs="0">
+				<!-- <xs:annotation> <xs:documentation> Indicates a type of discount 
+					or special offer. </xs:documentation> </xs:annotation> -->
+				<xs:annotation>
+					<xs:documentation>
+						A field for discount and special offer
+						information.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Seats" type="SeatType" maxOccurs="unbounded" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates the seat or space on a mode of
+						transporation.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="WrittenConfirmationNeeded" type="xs:boolean" maxOccurs="1" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates that a notice of verification must be
+						included.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Remarks" type="xs:string" maxOccurs="unbounded" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>
+						A field for extra free form information.
+					</xs:documentation>
+					<xs:documentation>
+						A field for extra free form information.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="FreeText" type="xs:string" maxOccurs="unbounded" minOccurs="0"/>
+			<xs:element name="Phones" type="xs:string" maxOccurs="unbounded" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates phone information.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:choice maxOccurs="1" minOccurs="1">
+				<xs:element name="Air" type="AirSegmentType" maxOccurs="1" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>
+							Indicates airline information.
+						</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="Car" type="CarSegmentType" maxOccurs="1" minOccurs="0">
+					<!-- <xs:annotation> <xs:documentation> This segment type is used for 
+						Car segments. </xs:documentation> </xs:annotation> -->
+					<xs:annotation>
+						<xs:documentation>
+							Indicates car information.
+						</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="Hotel" type="HotelSegmentType" maxOccurs="1" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>
+							This segment type is used for Hotel
+							Segments.
+						</xs:documentation>
+						<xs:documentation>
+							Indicates hotel information.
+						</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="Surface" type="SurfaceSegmentType" maxOccurs="1" minOccurs="0">
+				</xs:element>
+				<xs:element name="Tour" type="TourSegmentType" maxOccurs="1" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>
+							Indicates tour information.
+						</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="Rail" type="RailSegmentType" maxOccurs="1" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>
+							Indicates railway information.
+						</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="Bus" type="RailSegmentType" maxOccurs="1" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>
+							Indicates bus information.
+						</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="Sea" type="SeaSegmentType" maxOccurs="1" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>
+							Indicates boat and cruise information.
+						</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="Limo" type="TourSegmentType" maxOccurs="1" minOccurs="0"/>
+				<xs:element name="Other" type="OtherSegmentType" maxOccurs="1" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>
+							A free form field for information that is
+							not fulfilled in the already assigned
+							categories/types.
+						</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:choice>
+
+		</xs:sequence>
+
+		<xs:attribute name="duration" type="xs:string">
+			<xs:annotation>
+				<xs:documentation> Indicates an amount in minutes
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="quantity" type="xs:int">
+			<xs:annotation>
+				<xs:documentation> Indicates an amount of something.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="routeId" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>Flight, train, bus, tour number</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="segmentNbr" type="xs:int">
+			<xs:annotation>
+				<xs:documentation> Indicates the identifying number of the segment.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="segmentStatus" type="xs:string">
+			<xs:annotation>
+				<xs:documentation> Indicates the status of the segment.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="type">
+			<xs:annotation>
+				<xs:documentation>
+					Indicates the segment type.
+				</xs:documentation>
+			</xs:annotation>
+
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="AIR"/>
+					<xs:enumeration value="HOTEL"/>
+					<xs:enumeration value="CAR"/>
+					<xs:enumeration value="TOUR"/>
+					<xs:enumeration value="LIMO"/>
+					<xs:enumeration value="RAIL"/>
+					<xs:enumeration value="SEA"/>
+					<xs:enumeration value="BUS"/>					
+					<xs:enumeration value="SURFACE"/>
+					<xs:enumeration value="MCO"/>
+					<xs:enumeration value="INS"/>
+					<xs:enumeration value="OTHER"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+
+	</xs:complexType>
+
+	<xs:complexType name="CommissonType">
+		<xs:annotation>
+			<xs:documentation> Indicates the commission type.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Amount" type="CurrencyAmountType" maxOccurs="1" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation> Indicates quantity.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="code" type="xs:string"/>
+	</xs:complexType>
+
+	<xs:complexType name="TravelPointType">
+		<xs:annotation>
+			<xs:documentation>
+				Indicates the type of travel point or destination/stop.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="cityCode" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>
+					Indicates the code identifier for a city.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="dayOfWeek" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>
+					Indicates the day of the week.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="date" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>Indicates the date.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="time" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>Indicates the time.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="dateTime" type="xs:dateTime"/>
+		<xs:attribute name="cityDescription" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>
+					A field of text describing a city.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+
+		<xs:attribute name="countryCode" type="xs:string"/>
+		<xs:attribute name="terminal" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>
+					Indicates the terminal, or transportation boarding
+					site.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="gate" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>
+					Indicates the location of the gate, or
+					transportation boarding site.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="freeText" type="xs:string"/>
+		<xs:attribute name="checkInTime" type="xs:string"/>
+	</xs:complexType>
+
+
+
+	<xs:complexType name="RateType">
+		<xs:annotation>
+			<xs:documentation>
+				Indicates the type of rate.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Remark" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>
+						A field for extra free form information.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Amount" type="CurrencyAmountType">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates a quantitiy.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="RateTermCode" type="rateTermCode"/>
+		</xs:sequence>
+		<xs:attribute name="code" type="xs:string">
+
+
+		</xs:attribute>
+		<xs:attribute name="description" type="xs:string"/>
+
+	</xs:complexType>
+
+	<xs:complexType name="SpecialInfoType">
+		<xs:annotation>
+			<xs:documentation> Indicates the type of field for special
+				information.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Equipment" type="xs:string" maxOccurs="unbounded" minOccurs="0">
+			</xs:element>
+			<xs:element name="Information" type="xs:string" maxOccurs="unbounded" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation> Indicates where general information is located.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Request" type="xs:string" maxOccurs="unbounded" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="DiscountType">
+		<xs:attribute name="type" type="xs:string"/>
+		<xs:attribute name="corporateId" type="xs:string">
+			<xs:annotation>
+				<xs:documentation> Indicates an identifier for a corporation.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="vendorId" type="xs:string">
+			<xs:annotation>
+				<xs:documentation> Indicates an identifier for a vendor.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="value" type="xs:string">
+			<xs:annotation>
+				<xs:documentation> Indicates an amount of something.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+
+
+	<xs:complexType name="AirSegmentType">
+		<xs:annotation>
+			<xs:documentation>
+				This segment type is used for Air and Rail
+				Segments.
+				Rail Segments are entered as Air Segments in the GDS
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="FlightMiles" type="xs:int" maxOccurs="1" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>
+						A field where airline miles are entered.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Meal" type="MealType" maxOccurs="1" minOccurs="0"/>
+			<xs:element name="Entertainment" type="xs:string" maxOccurs="1" minOccurs="0">
+			</xs:element>
+			<xs:element name="SmokingIndicator" type="xs:boolean" maxOccurs="1" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates that the traveler is a smoker.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="EndDateAdjustment" type="xs:int" maxOccurs="1" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>
+						Changes the return date.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="AllianceInformation" type="xs:string" maxOccurs="1" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>
+						Information about the customer/company's
+						loyalties to certain transportation/hotel/etc
+						companies.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="StopCities" type="SegmentType" maxOccurs="unbounded" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates the cities where the traveler will be
+						departing from transportation, and possibly
+						transferring.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="StopDuration" type="xs:string" maxOccurs="1" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates how long the span of time between when
+						the traveler departs and boards transportation.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="OperatedBy" type="VendorType" maxOccurs="1" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates what company the transportation is
+						operated by.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Fare" type="FareAmountType" maxOccurs="1" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>
+						This is the TDC Authorizer fare amount type for
+						the segment.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="open" type="xs:boolean"/>
+
+		<xs:attribute name="eTicket" type="xs:boolean">
+			<xs:annotation>
+				<xs:documentation> Indicates an electroic ticket.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+
+
+	<xs:complexType name="RailSegmentType">
+		<xs:annotation>
+			<xs:documentation>
+				This segment type is used for Air and Rail
+				Segments.
+				Rail Segments are entered as Air Segments in the GDS
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="TripMiles" type="xs:int">
+				<xs:annotation>
+					<xs:documentation>
+						A field where airline miles are entered.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Meal" type="MealType">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates a type of meal to be served.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SmokingIndicator" type="xs:boolean">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates that the traveler is a smoker.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="EndDateAdjustment" type="xs:int">
+				<xs:annotation>
+					<xs:documentation>
+						Changes the return date.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="AllianceInformation" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>
+						Information about the customer/company's
+						loyalties to certain transportation/hotel/etc
+						companies.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="StopCities" type="SegmentType" maxOccurs="unbounded" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates the cities where the traveler will be
+						departing from transportation, and possibly
+						transferring.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="StopDuration" type="xs:string" maxOccurs="1" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates how long the span of time between when
+						the traveler departs and boards transportation.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="OperatedBy" type="VendorType" maxOccurs="1" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates what company the transportation is
+						operated by.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TicketControlNumber" type="xs:string" maxOccurs="unbounded" minOccurs="0">
+			</xs:element>
+			<xs:element name="Fare" type="FareAmountType" maxOccurs="1" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>
+						This is the TDC Authorizer fare amount type for
+						the segment.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="open" type="xs:boolean"/>
+
+	</xs:complexType>
+
+
+	<xs:complexType name="CarSegmentType">
+		<xs:annotation>
+			<xs:documentation> This segment type is used for Car segments.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="RatesAndFees" type="CarChargeType" maxOccurs="unbounded" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates the type of fees for rental cars.
+					</xs:documentation>
+					<xs:documentation>
+						A field designated for information pertaining to
+						rates and fees.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PickupNote" type="xs:string" maxOccurs="unbounded" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>
+						A field for remarks about picking up the
+						traveler
+						at a destination.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Remark" type="xs:string" maxOccurs="1" minOccurs="0">
+			</xs:element>
+			<xs:element name="RentalRateCode" type="xs:string" maxOccurs="1" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates the rate for car rentals.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="RateQuote" type="xs:string" maxOccurs="1" minOccurs="0"/>
+			<xs:element name="FlightInfo" type="FlightInfoType" maxOccurs="1" minOccurs="0">
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="HotelSegmentType">
+		<xs:annotation>
+			<xs:documentation> This segment type is used for Hotel Segments.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Address" type="xs:string" maxOccurs="1" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates the type of address.
+					</xs:documentation>
+					<xs:documentation>
+						A field for address information.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ArrivalDetails" type="xs:string" maxOccurs="1" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>
+						A field for remarks about the arrival point.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="DepartureDetails" type="xs:string" maxOccurs="1" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>
+						A field for remarks about the depature point.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="RateQuote" type="xs:string" maxOccurs="1" minOccurs="0">
+			</xs:element>
+			<xs:element name="RoomRates" type="RateType" maxOccurs="unbounded" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates the rate for a hotel room.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CancellationPolicy" type="xs:string" maxOccurs="1" minOccurs="0">
+			</xs:element>
+			<xs:element name="HoldUntilTime" type="xs:string" maxOccurs="1" minOccurs="0"/>
+		</xs:sequence>
+		<xs:attribute name="cancellationCode" type="xs:string">
+			<xs:annotation>
+				<xs:documentation> Indicates a cancellation.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="adultQty" type="xs:int">
+			<xs:annotation>
+				<xs:documentation> Indicates the number of adults.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="childQty" type="xs:int">
+			<xs:annotation>
+				<xs:documentation> Indicates the number of children.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="propertyCode" type="xs:string">
+			<xs:annotation>
+				<xs:documentation> INFORMATION GOES HERE
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+
+	<xs:complexType name="SurfaceSegmentType">
+		<xs:sequence>
+			<xs:element name="FlightService" type="FlightInfoType" maxOccurs="1" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation> Indicates which airline the traveler uses.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Fare" type="FareAmountType" maxOccurs="1" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>
+						This is the TDC Authorizer fare amount type for
+						the segment.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="passenger" type="xs:int">
+			<xs:annotation>
+				<xs:documentation> Indiates the passenger information.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="serviceType" type="xs:string">
+			<xs:annotation>
+				<xs:documentation> Indicates the type of service.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+
+
+	<xs:complexType name="GuaranteeType">
+		<xs:attribute name="type" type="xs:string">
+			<xs:annotation>
+				<xs:documentation> Indicates the guarantee type.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="value" type="xs:string">
+			<xs:annotation>
+				<xs:documentation> Indicates an amount of something.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+
+	<xs:complexType name="CarChargeType">
+		<xs:sequence>
+			<xs:element name="Rate" type="RateType" maxOccurs="1" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation> Indicates the amount of money something costs.
+					</xs:documentation>
+					<xs:documentation> Indicates the type of fees for rental cars.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Taxes" type="CurrencyAmountType" maxOccurs="unbounded" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation> Indicates taxes associated with the rate(s).
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Mileage" type="xs:string" maxOccurs="1" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation> Indicates the total miles for the trip, or
+						section of the trip.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="UnitOfMeasure" type="xs:string" maxOccurs="1" minOccurs="0">
+			</xs:element>
+			<xs:element name="NumberOfDays" type="xs:int" maxOccurs="1" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation> Indicates the total number of days between the
+						arrival date and the departure date.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="NumberOfHours" type="xs:int" maxOccurs="1" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation> Indicates the total number of hours the
+						transportation will take to reach the destination or transfer.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+
+
+	</xs:complexType>
+
+
+	<xs:complexType name="FlightInfoType">
+		<xs:sequence>
+			<xs:element name="DepartureDate" type="xs:string"/>
+			<xs:element name="DepartureTime" type="xs:string"/>
+			<xs:element name="DepartureDateTime" type="xs:dateTime"/>
+			<xs:element name="ArrivalDate" type="xs:string"/>
+			<xs:element name="ArrivalTime" type="xs:string"/>
+			<xs:element name="ArrivalDateTime" type="xs:dateTime"/>
+		</xs:sequence>
+		<xs:attribute name="flightNbr" type="xs:string"/>
+		<xs:attribute name="airlineCode" type="xs:string"/>
+		<xs:attribute name="originationCityCode" type="xs:string"/>
+		<xs:attribute name="destinationCityCode" type="xs:string"/>
+	</xs:complexType>
+
+	<xs:complexType name="TravelerType">
+		<xs:sequence>
+			<xs:element name="Emails" type="xs:string" maxOccurs="unbounded" minOccurs="0">
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="firstName" type="xs:string"/>
+		<xs:attribute name="lastName" type="xs:string"/>
+		<xs:attribute name="salutation" type="xs:string"/>
+		<xs:attribute name="suffix" type="xs:string"/>
+		<xs:attribute name="nameRef" type="xs:string"/>
+		<xs:attribute name="nameNbr" type="xs:string"/>
+		<xs:attribute name="gdsTravelerName" type="xs:string"/>
+
+		<xs:attribute name="hasInfant" type="xs:boolean"/>
+		<xs:attribute name="infant" type="xs:boolean"/>
+		<xs:attribute name="gdsNameNbr" type="xs:string"/>
+	</xs:complexType>
+
+	<!-- Segments -->
+
+	<!-- Membership -->
+
+	<!-- TDC Specific -->
+	<xs:complexType name="TDCType">
+		<xs:sequence>
+			<xs:element name="TroubleQueueOverride" type="TroubleType" maxOccurs="1" minOccurs="0">
+			</xs:element>
+			<xs:element name="TagLines" type="xs:string" maxOccurs="unbounded" minOccurs="0">
+			</xs:element>
+			<xs:element name="Attachment" type="AttachmentType" maxOccurs="unbounded" minOccurs="0">
+			</xs:element>
+			<xs:element name="SendTo" type="SendToType" maxOccurs="unbounded" minOccurs="0">
+			</xs:element>
+			<xs:element name="UserDefinedFields" type="UserDefinedFieldType" maxOccurs="unbounded" minOccurs="0">
+			</xs:element>
+			<xs:element name="destinationProduct" type="xs:string" minOccurs="1" maxOccurs="unbounded">
+			</xs:element>
+			<xs:element name="ItineraryId" type="xs:string" minOccurs="1" maxOccurs="1">
+			</xs:element>
+			<xs:element name="InvoiceOverride" type="xs:string" maxOccurs="1" minOccurs="0">
+			</xs:element>
+			<xs:element name="LanguageOverride" type="xs:string" maxOccurs="1" minOccurs="0">
+			</xs:element>
+			<xs:element name="SendDisclaimer" type="xs:boolean" maxOccurs="1" minOccurs="0">
+			</xs:element>
+			<xs:element name="Disclaimer" type="xs:string" maxOccurs="1" minOccurs="0"/>
+		</xs:sequence>
+		<xs:attribute name="report" type="xs:string"/>
+		<xs:attribute name="liability" type="xs:boolean"/>
+		<xs:attribute name="version" type="xs:string"/>
+		<xs:attribute name="companyId" type="xs:string">
+			<xs:annotation>
+					<xs:documentation>
+						companyID attribute comes from PNR (GDS) and belongs to the PNRType. It's left here temporary for compatibility with Authorizer P2B.
+					</xs:documentation>
+				</xs:annotation>				
+		</xs:attribute>
+	</xs:complexType>
+
+	<xs:complexType name="TDCAuthorizerType">
+		<xs:sequence>
+			<xs:element name="travelPurpose" type="xs:string" maxOccurs="1" minOccurs="0">
+			</xs:element>
+			<xs:element name="tripReason" type="xs:string" maxOccurs="1" minOccurs="0">
+			</xs:element>
+			<xs:element name="Reason" type="ReasonType" minOccurs="0" maxOccurs="unbounded">
+			</xs:element>
+			<xs:element name="destination" type="xs:string" maxOccurs="1" minOccurs="0">
+			</xs:element>
+			<xs:element name="travelDate" type="xs:date" maxOccurs="1" minOccurs="0">
+			</xs:element>
+			<xs:element name="returnDate" type="xs:date" maxOccurs="1" minOccurs="0">
+			</xs:element>
+			<xs:element name="advisedFare" type="FareAmountType" maxOccurs="1" minOccurs="0"/>
+			<xs:element name="lowFares" type="LowFaresType" maxOccurs="unbounded" minOccurs="0"/>
+			<xs:element name="carAdvisedRate" type="FareAmountType" maxOccurs="1" minOccurs="0"/>
+			<xs:element name="hotelAdvisedRate" type="FareAmountType" maxOccurs="1" minOccurs="0"/>
+			<xs:element name="resubmitReason" type="xs:string" maxOccurs="1" minOccurs="0"/>
+			<xs:element name="tripId" type="xs:int" maxOccurs="1" minOccurs="0"/>
+
+			<xs:element name="freeText" type="xs:string" maxOccurs="1" minOccurs="0">
+			</xs:element>
+			<xs:element name="tripLength" type="xs:int" maxOccurs="1" minOccurs="0">
+			</xs:element>
+			<xs:element name="segmentFare" type="segmentFareType" maxOccurs="unbounded" minOccurs="0">
+			</xs:element>
+			<xs:element name="tripFare" type="FareAmountType" maxOccurs="1" minOccurs="0">
+			</xs:element>
+			<xs:element name="changesRequiredFields" type="ChangesRequiredFieldsType" minOccurs="0" maxOccurs="unbounded">
+			</xs:element>
+			<xs:element name="authId" type="xs:int" maxOccurs="1" minOccurs="1">
+			</xs:element>
+			<xs:element name="segmentReason" type="ReasonType" maxOccurs="unbounded" minOccurs="0"/>
+		</xs:sequence>
+		<xs:attribute name="resubmit" type="xs:boolean"/>
+		<xs:attribute name="internationalTrip" type="xs:boolean"/>
+		<xs:attribute name="sendCodeSMS" type="xs:boolean"/>
+	</xs:complexType>
+
+	<xs:complexType name="ReasonType">
+		<xs:sequence>
+			<xs:element name="segmentTypeCode" type="SegmentTypeCodeType" minOccurs="1" maxOccurs="1">
+			</xs:element>
+			<xs:element name="segmentNbr" type="xs:int" maxOccurs="1" minOccurs="0"/>
+		</xs:sequence>
+		<xs:attribute name="reasonCode" type="xs:string"/>
+		<xs:attribute name="reasonDescription" type="xs:string"/>
+		<xs:attribute name="reasonLang" type="xs:string"/>
+	</xs:complexType>
+
+	<xs:simpleType name="SegmentTypeCodeType">
+		<xs:annotation>
+					<xs:documentation>
+						This SegmentType is used only for ReasonType
+					</xs:documentation>
+				</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="AIR"/>
+			<xs:enumeration value="CAR"/>
+			<xs:enumeration value="HOTEL"/>
+			<xs:enumeration value="RAIL"/>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:complexType name="FareAmountType">
+		<xs:sequence>
+			<xs:element name="fare" type="xs:string" maxOccurs="1" minOccurs="1"/>
+			<xs:element name="fareCurrencyCode" type="xs:string" maxOccurs="1" minOccurs="0"/>
+			<xs:element name="fareRemarks" type="xs:string" maxOccurs="unbounded" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+
+
+	<xs:complexType name="Line">
+		<xs:sequence>
+			<xs:element name="Line" type="xs:string" maxOccurs="1" minOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+
+
+
+	<xs:complexType name="TDCLine">
+		<xs:attribute name="ref" type="xs:string"/>
+		<xs:attribute name="text" type="xs:string"/>
+	</xs:complexType>
+
+
+	<!-- Trouble PCC and Queue Information -->
+	<xs:complexType name="TroubleType">
+		<xs:attribute name="pcc" type="xs:string"/>
+		<xs:attribute name="queue" type="xs:int"/>
+	</xs:complexType>
+
+	<!-- Standard attachment captured for TDC feature processing -->
+	<xs:complexType name="AttachmentType">
+		<xs:attribute name="type" type="xs:string">
+		</xs:attribute>
+		<xs:attribute name="fileName" type="xs:string">
+		</xs:attribute>
+	</xs:complexType>
+
+	<!-- SendTo contacts scanned from the PNR -->
+	<xs:complexType name="SendToType">
+		<xs:sequence>
+			<xs:element name="type" type="xs:string" maxOccurs="unbounded" minOccurs="0">
+			</xs:element>
+			<xs:element name="value" type="xs:string" maxOccurs="unbounded" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation> Indicates an amount of something.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="recipientName" type="xs:string">
+		</xs:attribute>
+	</xs:complexType>
+
+	<!-- Data Capture -->
+
+	<!-- User defined -->
+	<xs:complexType name="UserDefinedFieldType">
+
+		<xs:attribute name="name" type="xs:string"/>
+		<xs:attribute name="value" type="xs:string">
+			<xs:annotation>
+				<xs:documentation> Indicates an amount of something.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+
+	</xs:complexType>
+
+	<!-- Address captured and retrieve from database -->
+
+	<!-- Accounting -->
+
+	<!-- Accounting Previous Ticket -->
+	<xs:complexType name="PreviousTicketType">
+		<xs:sequence>
+			<xs:element name="amount" type="CurrencyAmountType"/>
+		</xs:sequence>
+		<xs:attribute name="number" type="xs:string"/>
+	</xs:complexType>
+
+	<!-- Accounting - Fee -->
+	<xs:complexType name="AccountingFee">
+		<xs:attribute name="type" type="xs:string"/>
+		<xs:attribute name="amount" type="xs:double"/>
+	</xs:complexType>
+
+	<!-- Accounting - Ticket -->
+
+	<!-- ETicket segment -->
+	<xs:complexType name="ETicketSegment">
+		<xs:attribute name="coupon" type="xs:int"/>
+		<xs:attribute name="carrier" type="xs:string"/>
+		<xs:attribute name="flightNbr" type="xs:string"/>
+		<xs:attribute name="classCode" type="xs:string"/>
+		<xs:attribute name="deptDateTime" type="xs:dateTime"/>
+		<xs:attribute name="orgCode" type="xs:string"/>
+		<xs:attribute name="destCode" type="xs:string"/>
+		<xs:attribute name="codeStatusForST" type="xs:string"/>
+		<xs:attribute name="FareBasisCode" type="xs:string"/>
+		<xs:attribute name="Status" type="xs:string"/>
+		<xs:attribute name="NotValidBefore" type="xs:string"/>
+		<xs:attribute name="NotValidAfter" type="xs:string"/>
+		<xs:attribute name="BaggageAllowance" type="xs:string"/>
+	</xs:complexType>
+
+	<xs:complexType name="CurrencyAmountType">
+		<xs:attribute name="currency" type="xs:string"/>
+		<xs:attribute name="amount" type="xs:double"/>
+	</xs:complexType>
+
+
+	<xs:complexType name="VendorType">
+		<xs:sequence>
+			<xs:element name="VendorName" type="xs:string" maxOccurs="1" minOccurs="0"/>
+		</xs:sequence>
+		<xs:attribute name="rloc" type="xs:string"/>
+		<xs:attribute name="codeShare" type="xs:string"/>
+		<xs:attribute name="code" type="xs:string"/>
+		<xs:attribute name="codeShareDescription" type="xs:string"/>
+	</xs:complexType>
+
+	<xs:complexType name="TourSegmentType">
+		<xs:sequence>
+			<xs:element name="CarInformation" type="xs:string" maxOccurs="unbounded" minOccurs="0">
+			</xs:element>
+			<xs:element name="Extensions" type="xs:string" maxOccurs="unbounded" minOccurs="0">
+			</xs:element>
+			<xs:element name="Features" type="xs:string" maxOccurs="unbounded" minOccurs="0">
+			</xs:element>
+			<xs:element name="Locations" type="xs:string" maxOccurs="unbounded" minOccurs="0">
+			</xs:element>
+			<xs:element name="Meal" type="MealType" maxOccurs="unbounded" minOccurs="0">
+			</xs:element>
+			<xs:element name="OptionalInformation" type="xs:string" maxOccurs="unbounded" minOccurs="0">
+			</xs:element>
+			<xs:element name="HotelInformation" type="TourHotelInformationType" maxOccurs="unbounded" minOccurs="0">
+			</xs:element>
+			<xs:element name="Fare" type="FareAmountType" maxOccurs="1" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>
+						This is the TDC Authorizer fare amount type for
+						the segment.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Fees" type="FeeType" maxOccurs="unbounded" minOccurs="0"/>
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string"/>
+		<xs:attribute name="price" type="xs:string"/>
+	</xs:complexType>
+
+	<xs:complexType name="AccommondationType"/>
+
+
+	<xs:complexType name="ScannedDataType">
+		<xs:sequence>
+			<xs:element name="pnr" type="PNRType" minOccurs="1" maxOccurs="1">
+			</xs:element>
+			<xs:element name="NewElement" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="PNRType">
+		<xs:sequence>
+			<xs:element minOccurs="1" maxOccurs="unbounded" name="Travelers" type="TravelerType">
+			</xs:element>
+			<xs:element minOccurs="1" maxOccurs="unbounded" name="Segments" type="SegmentType">
+			</xs:element>
+			<xs:element minOccurs="1" maxOccurs="1" name="TDC" type="TDCType">
+			</xs:element>
+			<xs:element name="Authorizer" type="TDCAuthorizerType" minOccurs="1" maxOccurs="1">
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="id" type="xs:string"/>
+		<xs:attribute name="rloc" type="xs:string"/>
+		<xs:attribute name="createDate" type="xs:dateTime"/>
+	</xs:complexType>
+
+	<xs:complexType name="SeatType">
+		<xs:sequence>
+			<xs:element name="SeatNbr" type="xs:string"/>
+			<xs:element name="SeatStatus" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+
+
+	<xs:element name="Itinerary">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="PNR" type="PNRType" maxOccurs="1" minOccurs="1"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:complexType name="TaxType">
+		<xs:sequence>
+			<xs:element name="Amount" type="CurrencyAmountType"/>
+		</xs:sequence>
+		<xs:attribute name="type" type="xs:string"/>
+	</xs:complexType>
+
+
+	<xs:complexType name="FeeType">
+		<xs:sequence>
+			<xs:element name="Amount" type="CurrencyAmountType"/>
+		</xs:sequence>
+		<xs:attribute name="type" type="xs:string"/>
+	</xs:complexType>
+
+
+
+
+	<xs:complexType name="OtherSegmentType">
+		<xs:annotation>
+			<xs:documentation>This is a catch-all segment.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="FreeText" type="xs:string" maxOccurs="unbounded" minOccurs="1">
+			</xs:element>
+			<xs:element name="Fare" type="FareAmountType" maxOccurs="1" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>
+						This is the TDC Authorizer fare amount type for
+						the segment.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="segmentType" type="xs:string"/>
+	</xs:complexType>
+
+	<xs:complexType name="SeaSegmentType">
+		<xs:sequence>
+			<xs:element name="ShipName" type="xs:string" maxOccurs="1" minOccurs="0">
+			</xs:element>
+			<xs:element name="CabinNmr" type="xs:string" maxOccurs="unbounded" minOccurs="0"/>
+			<xs:element name="Fare" type="FareAmountType" maxOccurs="unbounded" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>
+						This is the TDC Authorizer fare amount type for
+						the segment.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="cabinType" type="xs:string"/>
+		<xs:attribute name="NbrOfCabins" type="xs:string"/>
+	</xs:complexType>
+
+	<xs:complexType name="TourHotelInformationType">
+		<xs:sequence>
+			<xs:element name="OccupancyCode" type="xs:string" maxOccurs="1" minOccurs="0"/>
+			<xs:element name="RoomType" type="xs:string" maxOccurs="1" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+
+
+
+
+	<xs:complexType name="MealType">
+		<xs:attribute name="code" type="xs:string"/>
+		<xs:attribute name="description" type="xs:string"/>
+		<xs:attribute name="specialInd" type="xs:string"/>
+	</xs:complexType>
+
+
+	<xs:complexType name="ClassOfServiceType">
+		<xs:attribute name="code" type="xs:string"/>
+		<xs:attribute name="description" type="xs:string"/>
+	</xs:complexType>
+	<xs:complexType name="EquipmentType">
+		<xs:attribute name="code" type="xs:string"/>
+		<xs:attribute name="description" type="xs:string"/>
+	</xs:complexType>
+
+
+	<xs:complexType name="segmentFareType">
+		<xs:sequence>
+			<xs:element name="fare" type="FareAmountType" maxOccurs="1" minOccurs="1"/>
+		</xs:sequence>
+		<xs:attribute name="segmentNbr" type="xs:int"/>
+	</xs:complexType>
+
+    <xs:complexType name="ChangesRequiredFieldsType">
+    	<xs:sequence>
+			<xs:element name="segmentNumber" type="xs:int" minOccurs="1">
+			</xs:element>
+			<xs:element name="fieldName" type="xs:string" minOccurs="1"/>
+			<xs:element name="Remarks" type="xs:string" minOccurs="0" maxOccurs="1"/>
+		</xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="LowFaresType">
+    	<xs:sequence>
+    		<xs:element name="fare" type="FareAmountType" maxOccurs="1" minOccurs="1">
+    		</xs:element>
+    		<xs:element name="lowFareRemark" type="xs:string" maxOccurs="1" minOccurs="0">
+    		</xs:element>
+    		<xs:element name="lowFareSegment" type="SegmentType" maxOccurs="1" minOccurs="0"/>
+    	</xs:sequence>
+    </xs:complexType>
+
+    <xs:simpleType name="RemarkTypeCodeType">
+    	<xs:restriction base="xs:string">
+    		<xs:enumeration value="ASSOCIATED"/>
+    		<xs:enumeration value="UNASSOCIATED"/>
+    		<xs:enumeration value="EMAIL"/>
+    		<xs:enumeration value="CANNED"/>
+    		<xs:enumeration value="AGENT"/>
+    		<xs:enumeration value="FREEFORM"/>
+    		<xs:enumeration value="BILLING"/>
+    		<xs:enumeration value="UDEF"/>
+    		<xs:enumeration value="SPECIALNOTES"/>
+    		<xs:enumeration value="GENERAL"/>     		
+    	</xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="rateTermCode">
+    	<xs:restriction base="xs:string">
+					<xs:enumeration value="EXTRA_DAY"/>
+					<xs:enumeration value="EXTRA_HOUR"/>
+					<xs:enumeration value="EXTRA_WEEK"/>
+					<xs:enumeration value="EXTRA_MILES"/>
+					<xs:enumeration value="DAILY"/>
+					<xs:enumeration value="WEEKLY"/>
+					<xs:enumeration value="HOURLY"/>
+					<xs:enumeration value="MONTHLY"/>
+					<xs:enumeration value="RENTAL_PERIOD"/>
+					<xs:enumeration value="VEHICLE_CHARGE"/>
+					<xs:enumeration value="DROP_OFF_CHARGE"/>
+					<xs:enumeration value="TOTAL_AMOUNT"/>
+					<xs:enumeration value="APPROXIMATE_TOTAL_PRICE"/>
+					<xs:enumeration value="APPROXIMATE_EXTRA_DAY"/>
+					<xs:enumeration value="APPROXIMATE_EXTRA_HOUR"/>
+					<xs:enumeration value="APPROXIMATE_EXTRA_WEEK"/>
+					<xs:enumeration value="APPROXIMATE_EXTRA_MONTH"/>
+					<xs:enumeration value="UNLIMITED"/>
+					<xs:enumeration value="TOTAL_MANDATORY_CHARGE"/>
+					<xs:enumeration value="SPECIAL_EQUIPMENT_TOTAL_PRICE">
+					</xs:enumeration>
+				</xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="ETaxType">
+    	<xs:sequence>
+    		<xs:element name="Value" type="xs:string"/>
+    	</xs:sequence>
+    	<xs:attribute name="taxNbr" type="xs:int"/>
+    </xs:complexType>
+</xs:schema>

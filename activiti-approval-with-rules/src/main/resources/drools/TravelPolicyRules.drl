@@ -1,0 +1,119 @@
+//created on: Oct 17, 2014
+package org.mindboxing
+
+dialect "mvel"
+
+//list any import classes here.
+import org.mindboxing.schemas.itinerary.Itinerary
+import org.mindboxing.schemas.itinerary.UserDefinedFieldType
+import org.mindboxing.schemas.itinerary.SegmentType
+import org.mindboxing.schemas.itinerary.TDCAuthorizerType
+import org.mindboxing.schemas.itinerary.FareAmountType
+import org.mindboxing.schemas.itinerary.LowFaresType
+import org.mindboxing.pojo.Saving
+import org.mindboxing.pojo.AuthorizationAction
+import java.lang.Float;
+
+
+
+/* 
+Pre-Level 1 Auto-Approve Rule
+*/
+
+rule "No LLF"
+	salience 110
+    when
+    	$action : AuthorizationAction( autoApproved == false)
+    	Itinerary ( PNR.authorizer == null || PNR.authorizer!.lowFares.empty == true )
+    then
+		System.out.println("NO_LLF");		
+		modify ( $action ) { autoApproved = true, decision = "APPROVED" }
+end
+
+rule "Group or Benefit"
+	salience 100
+    when
+    	$action : AuthorizationAction( autoApproved == false )
+    	Itinerary ( $udef :  PNR!.TDC!.userDefinedFields )
+    	UserDefinedFieldType( name == "U60" && (value in ("U", "4", "3", "5", "W", "G", "N", "E") ) ) from $udef
+    then
+		System.out.println("EMPLOYEE_TYPE");
+		modify ( $action ) { autoApproved = true, decision = "APPROVED" }
+end
+
+
+
+/* 
+Post-Level 1 Rule for Requiring Manager Approver 
+*/
+
+rule "Domestic or International"
+	salience 1
+    when
+    	$action : AuthorizationAction( managerApproverRequired == true && autoApproved == false)
+    	Itinerary ( $segment :  PNR.segments )
+    	SegmentType ( origination.countryCode != destination.countryCode ) from $segment
+    then
+		System.out.println("DESTINATION_TYPE - International");
+		modify ( $action ) { managerApproverRequired = false, decision = "APPROVED" }
+end
+
+rule "Travel Plan Cost"
+	salience 2
+    when
+    	$action : AuthorizationAction( managerApproverRequired == true && autoApproved == false)
+    	$tdi : Itinerary ( $co : PNR.authorizer!.tripFare )
+    	FareAmountType( Float.parseFloat(fare)<=500) from $co
+    then
+		System.out.println("TRAVEL_PLAN_COST");
+		modify ( $action ) { managerApproverRequired = false, decision = "APPROVED" };
+end
+
+rule "lowest fare selected"
+	salience 51
+    when
+    	$action : AuthorizationAction( managerApproverRequired == true && autoApproved == false )
+    	$tdi : Itinerary( $lowFares : PNR.authorizer!.lowFares )
+		accumulate ( LowFaresType( $f :  Float.parseFloat(fare.fare) ) from $lowFares; 
+			$min : min($f);
+			$min == $action.fareOption
+		)
+    then
+		System.out.println("LOWESET_FARE_SELECTED ");
+		modify ( $action ) { managerApproverRequired = false , decision = "APPROVED" }
+end
+
+rule "Calculate Air Saving"
+	salience 50
+    when
+    	$action : AuthorizationAction( managerApproverRequired == true && autoApproved == false )
+    	$tdi : Itinerary ( $co : PNR.authorizer!.tripFare )
+    	FareAmountType( $coAmount : Float.parseFloat(fare) > 500) from $co
+    then
+		System.out.println("Calculate Air Saving");
+    	Saving $saving = new Saving();
+    	$saving.amount = $coAmount - $action.fareOption ;
+    	$saving.percentage = ( $saving.amount /  $coAmount ) * 100;
+		System.out.println("Amount " +$saving.amount);
+		insert ( $saving )
+end
+/*
+rule "Air Saving 5%"
+	salience 50
+    when
+    	$action : AuthorizationAction( managerApproverRequired == true && autoApproved == false )
+    	$saving : Saving( percentage < 5 )
+    then
+		System.out.println("TRAVEL_PLAN_COST < 5% "+$saving.percentage);
+		modify ( $action ) { managerApproverRequired = false , decision = "APPROVED" }
+end    
+*/
+rule "Missing Air Savings"
+	salience 50
+    when
+    	$action : AuthorizationAction( managerApproverRequired == true && autoApproved == false )
+    	$saving : Saving( amount < 500 )
+    then
+		System.out.println("Missing Air Savings < 500 "+$saving.amount);
+		modify ( $action ) { managerApproverRequired = false , decision = "APPROVED" }
+end    
